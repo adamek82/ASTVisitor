@@ -28,6 +28,9 @@ Token Lexer::getNextToken() {
     }
 
     if (current == '+') { pos++; return {TokenType::PLUS, "+"}; }
+    if (current == '-') { pos++; return {TokenType::MINUS, "-"}; }
+    if (current == '*') { pos++; return {TokenType::MULTIPLY, "*"}; }
+    if (current == '/') { pos++; return {TokenType::DIVIDE, "/"}; }
     if (current == '=') { pos++; return {TokenType::EQUAL, "="}; }
 
     throw std::runtime_error("Unexpected character: " + std::string(1, current));

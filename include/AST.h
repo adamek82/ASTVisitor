@@ -41,4 +41,34 @@ public:
     void accept(Visitor* visitor) override;
 };
 
+// Subtraction Node
+class NodeMinus : public Node {
+public:
+    std::unique_ptr<Node> left;
+    std::unique_ptr<Node> right;
+
+    NodeMinus(std::unique_ptr<Node> l, std::unique_ptr<Node> r);
+    void accept(Visitor* visitor) override;
+};
+
+// Multiplication Node
+class NodeMultiply : public Node {
+public:
+    std::unique_ptr<Node> left;
+    std::unique_ptr<Node> right;
+
+    NodeMultiply(std::unique_ptr<Node> l, std::unique_ptr<Node> r);
+    void accept(Visitor* visitor) override;
+};
+
+// Division Node
+class NodeDivide : public Node {
+public:
+    std::unique_ptr<Node> left;
+    std::unique_ptr<Node> right;
+
+    NodeDivide(std::unique_ptr<Node> l, std::unique_ptr<Node> r);
+    void accept(Visitor* visitor) override;
+};
+
 #endif // AST_H

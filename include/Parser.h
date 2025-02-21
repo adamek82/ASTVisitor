@@ -14,6 +14,8 @@ class Parser {
     std::unique_ptr<Node> parseNumber();
     std::unique_ptr<Node> parseExpression();
     std::unique_ptr<Node> parseAssignment();
+    std::unique_ptr<Node> parseTerm();
+    std::unique_ptr<Node> parseFactor();
 
 public:
     explicit Parser(Lexer lex);

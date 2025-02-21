@@ -27,3 +27,30 @@ NodeAssign::NodeAssign(std::string var, std::unique_ptr<Node> expr)
 void NodeAssign::accept(Visitor* visitor) {
     visitor->visit(this);
 }
+
+// Constructor for NodeMinus
+NodeMinus::NodeMinus(std::unique_ptr<Node> l, std::unique_ptr<Node> r)
+    : left(std::move(l)), right(std::move(r)) {}
+
+// Accept function for NodeMinus
+void NodeMinus::accept(Visitor* visitor) {
+    visitor->visit(this);
+}
+
+// Constructor for NodeMultiply
+NodeMultiply::NodeMultiply(std::unique_ptr<Node> l, std::unique_ptr<Node> r)
+    : left(std::move(l)), right(std::move(r)) {}
+
+// Accept function for NodeMultiply
+void NodeMultiply::accept(Visitor* visitor) {
+    visitor->visit(this);
+}
+
+// Constructor for NodeDivide
+NodeDivide::NodeDivide(std::unique_ptr<Node> l, std::unique_ptr<Node> r)
+    : left(std::move(l)), right(std::move(r)) {}
+
+// Accept function for NodeDivide
+void NodeDivide::accept(Visitor* visitor) {
+    visitor->visit(this);
+}

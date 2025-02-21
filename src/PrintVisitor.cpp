@@ -17,3 +17,27 @@ void PrintVisitor::visit(NodeAssign* node) {
     std::cout << node->variable << " = ";
     node->expression->accept(this);
 }
+
+void PrintVisitor::visit(NodeMinus* node) {
+    std::cout << "(";
+    node->left->accept(this);
+    std::cout << " - ";
+    node->right->accept(this);
+    std::cout << ")";
+}
+
+void PrintVisitor::visit(NodeMultiply* node) {
+    std::cout << "(";
+    node->left->accept(this);
+    std::cout << " * ";
+    node->right->accept(this);
+    std::cout << ")";
+}
+
+void PrintVisitor::visit(NodeDivide* node) {
+    std::cout << "(";
+    node->left->accept(this);
+    std::cout << " / ";
+    node->right->accept(this);
+    std::cout << ")";
+}

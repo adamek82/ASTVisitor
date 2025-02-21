@@ -23,16 +23,6 @@ std::unique_ptr<Node> Parser::parseNumber() {
     return std::make_unique<NodeNumber>(value);
 }
 
-std::unique_ptr<Node> Parser::parseExpression() {
-    auto left = parseNumber();
-    while (currentToken.type == TokenType::PLUS) {
-        eat(TokenType::PLUS);
-        auto right = parseNumber();
-        left = std::make_unique<NodePlus>(std::move(left), std::move(right));
-    }
-    return left;
-}
-
 std::unique_ptr<Node> Parser::parseAssignment() {
     std::string varName = currentToken.value;
     eat(TokenType::IDENTIFIER);
@@ -43,4 +33,44 @@ std::unique_ptr<Node> Parser::parseAssignment() {
 
 std::unique_ptr<Node> Parser::parse() {
     return parseAssignment();
+}
+
+std::unique_ptr<Node> Parser::parseExpression() {
+    auto left = parseTerm();
+    while (currentToken.type == TokenType::PLUS || currentToken.type == TokenType::MINUS) {
+        TokenType op = currentToken.type;
+        eat(op);
+        auto right = parseTerm();
+        if (op == TokenType::PLUS) {
+            left = std::make_unique<NodePlus>(std::move(left), std::move(right));
+        } else {
+            left = std::make_unique<NodeMinus>(std::move(left), std::move(right));
+        }
+    }
+    return left;
+}
+
+std::unique_ptr<Node> Parser::parseTerm() {
+    auto left = parseFactor();
+    while (currentToken.type == TokenType::MULTIPLY || currentToken.type == TokenType::DIVIDE) {
+        TokenType op = currentToken.type;
+        eat(op);
+        auto right = parseFactor();
+        if (op == TokenType::MULTIPLY) {
+            left = std::make_unique<NodeMultiply>(std::move(left), std::move(right));
+        } else {
+            left = std::make_unique<NodeDivide>(std::move(left), std::move(right));
+        }
+    }
+    return left;
+}
+
+std::unique_ptr<Node> Parser::parseFactor() {
+    if (currentToken.type == TokenType::NUMBER) {
+        return parseNumber();
+    } else if (currentToken.type == TokenType::IDENTIFIER) {
+        return parseAssignment();
+    } else {
+        throw std::runtime_error("Unexpected token in factor: " + currentToken.value);
+    }
 }

@@ -6,7 +6,7 @@
 #include "PrintVisitor.h"
 
 int main() {
-    std::string input = "x = 5 + 10";  // Example input
+    std::string input = "x = 5 + 10 * 2 - 3 / 1";  // Example input
 
     try {
         // Lexing and Parsing
