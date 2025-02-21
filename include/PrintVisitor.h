@@ -1,0 +1,16 @@
+// PrintVisitor.h - Concrete visitor for printing
+#ifndef PRINTVISITOR_H
+#define PRINTVISITOR_H
+
+#include "Visitor.h"
+#include "AST.h"
+#include <iostream>
+
+class PrintVisitor : public Visitor {
+public:
+    void visit(NodeNumber* node) override;
+    void visit(NodePlus* node) override;
+    void visit(NodeAssign* node) override;
+};
+
+#endif // PRINTVISITOR_H
