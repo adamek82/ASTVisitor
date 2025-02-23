@@ -3,7 +3,7 @@
 #include "Visitor.h"
 
 // Constructor for NodeNumber
-NodeNumber::NodeNumber(int val) : value(val) {}
+NodeNumber::NodeNumber(double val) : value(val) {}
 
 // Accept function for NodeNumber
 void NodeNumber::accept(Visitor* visitor) {
@@ -52,5 +52,12 @@ NodeDivide::NodeDivide(std::unique_ptr<Node> l, std::unique_ptr<Node> r)
 
 // Accept function for NodeDivide
 void NodeDivide::accept(Visitor* visitor) {
+    visitor->visit(this);
+}
+
+NodePower::NodePower(std::unique_ptr<Node> l, std::unique_ptr<Node> r)
+    : left(std::move(l)), right(std::move(r)) {}
+
+void NodePower::accept(Visitor* visitor) {
     visitor->visit(this);
 }

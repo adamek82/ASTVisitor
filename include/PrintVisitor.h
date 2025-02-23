@@ -13,6 +13,7 @@ public:
     void visit(NodeMinus* node) override;
     void visit(NodeMultiply* node) override;
     void visit(NodeDivide* node) override;
+    void visit(NodePower* node) override;
     void visit(NodeAssign* node) override;
 };
 

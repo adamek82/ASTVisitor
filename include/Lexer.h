@@ -6,7 +6,18 @@
 #include <vector>
 
 // Token types
-enum class TokenType { IDENTIFIER, NUMBER, PLUS, MINUS, MULTIPLY, DIVIDE, EQUAL, END };
+enum class TokenType {
+    IDENTIFIER, NUMBER,
+    PLUS,
+    MINUS,
+    MULTIPLY,
+    DIVIDE,
+    POWER,
+    EQUAL,
+    LPAREN,
+    RPAREN,
+    END
+};
 
 // Token structure
 struct Token {

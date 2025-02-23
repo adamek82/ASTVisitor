@@ -16,8 +16,8 @@ public:
 // Number Node
 class NodeNumber : public Node {
 public:
-    int value;
-    explicit NodeNumber(int val);
+    double value;
+    explicit NodeNumber(double val);
     void accept(Visitor* visitor) override;
 };
 
@@ -68,6 +68,15 @@ public:
     std::unique_ptr<Node> right;
 
     NodeDivide(std::unique_ptr<Node> l, std::unique_ptr<Node> r);
+    void accept(Visitor* visitor) override;
+};
+
+class NodePower : public Node {
+public:
+    std::unique_ptr<Node> left;
+    std::unique_ptr<Node> right;
+
+    NodePower(std::unique_ptr<Node> l, std::unique_ptr<Node> r);
     void accept(Visitor* visitor) override;
 };
 

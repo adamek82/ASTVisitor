@@ -8,6 +8,7 @@ class NodeMinus;
 class NodeMultiply;
 class NodeDivide;
 class NodeAssign;
+class NodePower;
 
 class Visitor {
 public:
@@ -16,6 +17,7 @@ public:
     virtual void visit(NodeMinus* node) = 0;
     virtual void visit(NodeMultiply* node) = 0;
     virtual void visit(NodeDivide* node) = 0;
+    virtual void visit(NodePower* node) = 0;
     virtual void visit(NodeAssign* node) = 0;
     virtual ~Visitor() = default;
 };

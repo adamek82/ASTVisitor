@@ -18,7 +18,7 @@ void Parser::eat(TokenType expectedType) {
 }
 
 std::unique_ptr<Node> Parser::parseNumber() {
-    int value = std::stoi(currentToken.value);
+    double value = std::stod(currentToken.value);
     eat(TokenType::NUMBER);
     return std::make_unique<NodeNumber>(value);
 }
@@ -66,11 +66,35 @@ std::unique_ptr<Node> Parser::parseTerm() {
 }
 
 std::unique_ptr<Node> Parser::parseFactor() {
-    if (currentToken.type == TokenType::NUMBER) {
-        return parseNumber();
-    } else if (currentToken.type == TokenType::IDENTIFIER) {
-        return parseAssignment();
-    } else {
-        throw std::runtime_error("Unexpected token in factor: " + currentToken.value);
+    // Factor can be a "power" expression, parentheses, or a number
+    return parsePower();
+}
+
+std::unique_ptr<Node> Parser::parsePower() {
+    std::unique_ptr<Node> left;
+
+    if (currentToken.type == TokenType::LPAREN) {   // Handle parentheses first
+        eat(TokenType::LPAREN);
+        left = parseExpression();  // parse the whole subexpression
+        eat(TokenType::RPAREN);
     }
+    // Next, if it's a NUMBER
+    else if (currentToken.type == TokenType::NUMBER) {
+        left = parseNumber();
+    }
+    // Or an IDENTIFIER (assignment)
+    else if (currentToken.type == TokenType::IDENTIFIER) {
+        left = parseAssignment();
+    }
+    else {
+        throw std::runtime_error("Unexpected token in parsePower: " + currentToken.value);
+    }
+
+    // Then handle exponent (^), which is right-associative
+    while (currentToken.type == TokenType::POWER) {
+        eat(TokenType::POWER);
+        auto right = parsePower();  // recursively parse the exponent
+        left = std::make_unique<NodePower>(std::move(left), std::move(right));
+    }
+    return left;
 }

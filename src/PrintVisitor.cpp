@@ -41,3 +41,11 @@ void PrintVisitor::visit(NodeDivide* node) {
     node->right->accept(this);
     std::cout << ")";
 }
+
+void PrintVisitor::visit(NodePower* node) {
+    std::cout << "(";
+    node->left->accept(this);
+    std::cout << " ^ ";
+    node->right->accept(this);
+    std::cout << ")";
+}
