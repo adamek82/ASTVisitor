@@ -5,6 +5,10 @@ void PrintVisitor::visit(NodeNumber* node) {
     std::cout << node->value;
 }
 
+void PrintVisitor::visit(NodeVarRef* node) {
+    std::cout << node->varName;  // Print the variable name
+}
+
 void PrintVisitor::visit(NodePlus* node) {
     std::cout << "(";
     node->left->accept(this);

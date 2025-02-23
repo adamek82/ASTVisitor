@@ -9,6 +9,7 @@
 class PrintVisitor : public Visitor {
 public:
     void visit(NodeNumber* node) override;
+    void visit(NodeVarRef* node) override;
     void visit(NodePlus* node) override;
     void visit(NodeMinus* node) override;
     void visit(NodeMultiply* node) override;

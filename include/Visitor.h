@@ -2,7 +2,9 @@
 #ifndef VISITOR_H
 #define VISITOR_H
 
+// Forward declarations for node types
 class NodeNumber;
+class NodeVarRef;
 class NodePlus;
 class NodeMinus;
 class NodeMultiply;
@@ -13,6 +15,7 @@ class NodePower;
 class Visitor {
 public:
     virtual void visit(NodeNumber* node) = 0;
+    virtual void visit(NodeVarRef* node) = 0;
     virtual void visit(NodePlus* node) = 0;
     virtual void visit(NodeMinus* node) = 0;
     virtual void visit(NodeMultiply* node) = 0;

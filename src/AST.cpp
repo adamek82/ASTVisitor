@@ -10,6 +10,15 @@ void NodeNumber::accept(Visitor* visitor) {
     visitor->visit(this);
 }
 
+// Constructor for NodeVarRef
+NodeVarRef::NodeVarRef(std::string name)
+    : varName(std::move(name)) {}
+
+// Accept function for NodeVarRef
+void NodeVarRef::accept(Visitor* visitor) {
+    visitor->visit(this);
+}
+
 // Constructor for NodePlus
 NodePlus::NodePlus(std::unique_ptr<Node> l, std::unique_ptr<Node> r)
     : left(std::move(l)), right(std::move(r)) {}

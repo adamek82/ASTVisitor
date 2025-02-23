@@ -84,7 +84,19 @@ std::unique_ptr<Node> Parser::parsePower() {
     }
     // Or an IDENTIFIER (assignment)
     else if (currentToken.type == TokenType::IDENTIFIER) {
-        left = parseAssignment();
+        // Check the next token to decide if it’s an assignment or a var ref
+        std::string varName = currentToken.value;
+        eat(TokenType::IDENTIFIER);
+
+        if (currentToken.type == TokenType::EQUAL) {
+            // This is an assignment like `x = ...`
+            eat(TokenType::EQUAL);
+            auto expr = parseExpression();
+            return std::make_unique<NodeAssign>(varName, std::move(expr));
+        } else {
+            // Just a variable reference, e.g. `x` in:  `y = x * 5`
+            return std::make_unique<NodeVarRef>(varName);
+        }
     }
     else {
         throw std::runtime_error("Unexpected token in parsePower: " + currentToken.value);

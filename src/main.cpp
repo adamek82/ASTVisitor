@@ -4,6 +4,7 @@
 #include "Lexer.h"
 #include "Parser.h"
 #include "PrintVisitor.h"
+#include "EvaluatingVisitor.h"
 
 int main() {
     std::string input = "x = (5.5 + 2e1 * (3.14 - 1)) ^ 2 ^ 2 - 30 / 6.2";  // Example input
@@ -16,7 +17,13 @@ int main() {
 
         // Print the AST
         PrintVisitor printer;
-        ast->accept(&printer);  // Output: x = (5 + 10)
+        ast->accept(&printer);
+        std::cout << std::endl;
+
+        // Evaluate the AST
+        EvaluatingVisitor eval;
+        double result = eval.evaluate(ast.get());
+        std::cout << "Evaluated result: " << result << "\n";
     } catch (const std::exception& e) {
         std::cerr << "\nError: " << e.what() << '\n';
     }

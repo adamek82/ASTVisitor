@@ -21,6 +21,14 @@ public:
     void accept(Visitor* visitor) override;
 };
 
+// Node for referencing a variable (like `x`, `y`)
+class NodeVarRef : public Node {
+    public:
+        std::string varName;
+        explicit NodeVarRef(std::string name);
+        void accept(Visitor* visitor) override;
+    };
+
 // Addition Node
 class NodePlus : public Node {
 public:
