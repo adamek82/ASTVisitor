@@ -23,11 +23,11 @@ public:
 
 // Node for referencing a variable (like `x`, `y`)
 class NodeVarRef : public Node {
-    public:
-        std::string varName;
-        explicit NodeVarRef(std::string name);
-        void accept(Visitor* visitor) override;
-    };
+public:
+    std::string varName;
+    explicit NodeVarRef(std::string name);
+    void accept(Visitor* visitor) override;
+};
 
 // Addition Node
 class NodePlus : public Node {
