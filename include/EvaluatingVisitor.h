@@ -1,4 +1,3 @@
-// EvaluatingVisitor.h
 #pragma once
 
 #include "Visitor.h"

@@ -1,4 +1,3 @@
-// EvaluatingVisitor.cpp
 #include "EvaluatingVisitor.h"
 
 double EvaluatingVisitor::evaluate(Node* node) {
@@ -6,7 +5,7 @@ double EvaluatingVisitor::evaluate(Node* node) {
         throw std::runtime_error("Null AST node in evaluate()");
     }
 
-    // ważne: czyścisz stos dla pojedynczego “run”
+    // Important: clear the stack for a single evaluation run
     valueStack.clear();
 
     node->accept(this);
@@ -64,7 +63,7 @@ void EvaluatingVisitor::visit(NodePower* node) {
                [](double a, double b) { return std::pow(a, b); });
 }
 
-// Assign: najpierw RHS -> pop -> store -> push (bo assignment “zwraca” wartość)
+// Assign: first evaluate RHS -> pop -> store -> push (because assignment yields a value)
 void EvaluatingVisitor::visit(NodeAssign* node) {
     if (!node->expression) {
         throw std::runtime_error("Null RHS in assignment");
