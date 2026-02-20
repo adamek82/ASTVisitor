@@ -1,70 +1,78 @@
+// EvaluatingVisitor.cpp
 #include "EvaluatingVisitor.h"
 
 double EvaluatingVisitor::evaluate(Node* node) {
-    // Reset currentValue each time we start a new eval
-    currentValue = 0.0;
-    if (!node) throw std::runtime_error("Null AST node in evaluate()");
-    node->accept(this);      // This sets currentValue
-    return currentValue;     // Return the value computed by the visit(...)
+    if (!node) {
+        throw std::runtime_error("Null AST node in evaluate()");
+    }
+
+    // ważne: czyścisz stos dla pojedynczego “run”
+    valueStack.clear();
+
+    node->accept(this);
+
+    if (valueStack.size() != 1) {
+        throw std::runtime_error(
+            "Evaluator bug: expected exactly one value on stack after evaluation, got " +
+            std::to_string(valueStack.size())
+        );
+    }
+
+    return pop();
 }
 
-// Handle numbers
+// Number => push(value)
 void EvaluatingVisitor::visit(NodeNumber* node) {
-    currentValue = node->value;
+    push(node->value);
 }
 
-// Handle addition
-void EvaluatingVisitor::visit(NodePlus* node) {
-    double leftVal, rightVal;
-    leftVal = evaluate(node->left.get());
-    rightVal = evaluate(node->right.get());
-    currentValue = leftVal + rightVal;
-}
-
-// Handle subtraction
-void EvaluatingVisitor::visit(NodeMinus* node) {
-    double leftVal, rightVal;
-    leftVal = evaluate(node->left.get());
-    rightVal = evaluate(node->right.get());
-    currentValue = leftVal - rightVal;
-}
-
-// Handle multiplication
-void EvaluatingVisitor::visit(NodeMultiply* node) {
-    double leftVal, rightVal;
-    leftVal = evaluate(node->left.get());
-    rightVal = evaluate(node->right.get());
-    currentValue = leftVal * rightVal;
-}
-
-// Handle division
-void EvaluatingVisitor::visit(NodeDivide* node) {
-    double leftVal, rightVal;
-    leftVal = evaluate(node->left.get());
-    rightVal = evaluate(node->right.get());
-    if (rightVal == 0.0) throw std::runtime_error("Division by zero");
-    currentValue = leftVal / rightVal;
-}
-
-// Handle exponent
-void EvaluatingVisitor::visit(NodePower* node) {
-    double baseVal = evaluate(node->left.get());
-    double expVal = evaluate(node->right.get());
-    currentValue = std::pow(baseVal, expVal);
-}
-
-// Handle assignment: evaluate the RHS, store in symbol table
-void EvaluatingVisitor::visit(NodeAssign* node) {
-    double rhs = evaluate(node->expression.get());
-    symbols[node->variable] = rhs;    // store in map
-    currentValue = rhs;               // assignment yields the assigned value
-}
-
-// Handle variable reference
+// VarRef => push(symbols[name])
 void EvaluatingVisitor::visit(NodeVarRef* node) {
     auto it = symbols.find(node->varName);
     if (it == symbols.end()) {
         throw std::runtime_error("Undefined variable: " + node->varName);
     }
-    currentValue = it->second;  // fetch from symbol table
+    push(it->second);
+}
+
+// Plus => evalBinary(left, right, +)
+void EvaluatingVisitor::visit(NodePlus* node) {
+    evalBinary(node->left.get(), node->right.get(),
+               [](double a, double b) { return a + b; });
+}
+
+void EvaluatingVisitor::visit(NodeMinus* node) {
+    evalBinary(node->left.get(), node->right.get(),
+               [](double a, double b) { return a - b; });
+}
+
+void EvaluatingVisitor::visit(NodeMultiply* node) {
+    evalBinary(node->left.get(), node->right.get(),
+               [](double a, double b) { return a * b; });
+}
+
+void EvaluatingVisitor::visit(NodeDivide* node) {
+    evalBinary(node->left.get(), node->right.get(),
+               [](double a, double b) {
+                   if (b == 0.0) throw std::runtime_error("Division by zero");
+                   return a / b;
+               });
+}
+
+void EvaluatingVisitor::visit(NodePower* node) {
+    evalBinary(node->left.get(), node->right.get(),
+               [](double a, double b) { return std::pow(a, b); });
+}
+
+// Assign: najpierw RHS -> pop -> store -> push (bo assignment “zwraca” wartość)
+void EvaluatingVisitor::visit(NodeAssign* node) {
+    if (!node->expression) {
+        throw std::runtime_error("Null RHS in assignment");
+    }
+
+    node->expression->accept(this);
+    double rhs = pop();
+
+    symbols[node->variable] = rhs;
+    push(rhs);
 }
