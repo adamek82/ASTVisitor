@@ -1,15 +1,24 @@
 {
-    "version": "2.0.0",
-    "tasks": [
-        {
-            "label": "CMake Build",
-            "type": "shell",
-            "command": "cmake --build build",
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            },
-            "problemMatcher": ["$msCompile"]
-        }
-    ]
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Build (Debug)",
+      "type": "shell",
+      "command": "cmake",
+      "args": ["--build", "${workspaceFolder}/build", "--config", "Debug"],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "problemMatcher": ["$msCompile"]
+    },
+    {
+      "label": "Clean Rebuild (Debug)",
+      "type": "shell",
+      "command": "cmake",
+      "args": ["--build", "${workspaceFolder}/build", "--config", "Debug", "--clean-first"],
+      "group": "build",
+      "problemMatcher": ["$msCompile"]
+    }
+  ]
 }

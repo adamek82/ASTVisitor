@@ -1,16 +1,16 @@
 {
-    "version": "2.0.0",
-    "configurations": [
-        {
-            "name": "Launch ASTVisitor",
-            "type": "cppvsdbg",  // ✅ Use MSVC debugger
-            "request": "launch",
-            "program": "${workspaceFolder}/bin/Debug/ASTVisitor.exe",  // ✅ Make sure this path is correct
-            "args": [],
-            "stopAtEntry": false,
-            "cwd": "${workspaceFolder}",
-            "environment": [],
-            "console": "integratedTerminal",
-        }
-    ]
+  "version": "2.0.0",
+  "configurations": [
+    {
+      "name": "Launch ASTVisitor (CMake)",
+      "type": "cppvsdbg",
+      "request": "launch",
+      "program": "${command:cmake.launchTargetPath}",
+      "args": [],
+      "stopAtEntry": false,
+      "cwd": "${workspaceFolder}",
+      "environment": [],
+      "console": "integratedTerminal"
+    }
+  ]
 }
